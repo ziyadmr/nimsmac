@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAC Address Collection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .success-message {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>MAC Address Collection</h1>
+  <form id="macForm">
+    <label for="type">Type:</label>
+    <select id="type" name="type" required>
+      <option value="">Select</option>
+      <option value="Employee">Employee</option>
+      <option value="Student">Student</option>
+    </select>
+    
+    <label for="code">Code (Employee Code / Admission Number):</label>
+    <input type="text" id="code" name="code" required>
+    
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    
+    <label for="macAddress">MAC Address:</label>
+    <input type="text" id="macAddress" name="macAddress" required pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$">
+    
+    <button type="submit">Submit</button>
+    <p class="success-message" id="successMessage"></p>
+  </form>
+
+  <script>
+    const form = document.getElementById('macForm');
+    const successMessage = document.getElementById('successMessage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const type = document.getElementById('type').value;
+      const code = document.getElementById('code').value;
+      const name = document.getElementById('name').value;
+      const macAddress = document.getElementById('macAddress').value;
+
+      const data = { type, code, name, macAddress };
+
+      try {
+        const response = await fetch('<AKfycbwdD9PZwKTN-O4qqcnUi6WEpCfduv9BRdplr5pofqib0h5_myXL64z4R0DIsJ75bbdL>', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        successMessage.textContent = result.message;
+
+        form.reset();
+      } catch (error) {
+        console.error('Error:', error);
+        successMessage.textContent = "An error occurred. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
